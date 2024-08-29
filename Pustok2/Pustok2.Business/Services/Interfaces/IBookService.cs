@@ -10,7 +10,7 @@ namespace Pustok2.Business.Services.Interfaces
 		Task CreateAsync(CreateBookVM vm);
 		Task UpdateAsync(int? id, UpdateBookVM vm);
 		Task<Book> GetByIdAsync(int? id);
-		Task DeleteAsync(int id);
+		Task DeleteAsync(int id, params string[] includes);
 		Task<ICollection<Book>> GetAllAsync(Expression<Func<Book, bool>> expression, params string[] includes);
 		public Task<Book> GetByExpressionAsync(Expression<Func<Book, bool>> expression, params string[] includes);
     }
