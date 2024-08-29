@@ -133,18 +133,27 @@ namespace Pustok2.Business.Services.Implementations
 			await _bookRepository.CommitAsync();
 		}
 
-		public async Task DeleteAsync(int id)
-		{
-            var data = await _bookRepository.GetByIdAsync(id);
+		public async Task DeleteAsync(int id, params string[] includes)
+{
+	var book = await _bookRepository.GetByIdAsync(id, includes);
 
-            if (data is null)
-            {
-                throw new EntityNotFoundException("Book Not found");
-            }
+	if (book == null)
+    {
+        throw new EntityNotFoundException("Book Not found");
+    }
 
-			_bookRepository.Delete(data);
-			await _bookRepository.CommitAsync();
+    foreach (var image in book.BookImages)
+    {
+        if (!string.IsNullOrEmpty(image.ImageUrl))
+        {
+            image.ImageUrl.DeleteFile(_env.WebRootPath, "uploads/books");
         }
+    }
+
+    _bookRepository.Delete(book);
+    await _bookRepository.CommitAsync();
+
+}
 
 		public async Task<ICollection<Book>> GetAllAsync(Expression<Func<Book, bool>> expression, params string[] includes)
 		{
