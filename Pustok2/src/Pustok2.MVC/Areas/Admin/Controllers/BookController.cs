@@ -272,7 +272,7 @@ public class BookController : Controller
     public async Task<IActionResult> Delete(int id)
     {
 
-        await _bookService.DeleteAsync(id);
+        await _bookService.DeleteAsync(id, "BookImages");
         return RedirectToAction(nameof(Index));
     }
 
